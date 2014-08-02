@@ -1,0 +1,37 @@
+/* CSS File for Mypanel Dashboard */
+body {
+
+}
+
+header {
+	background-color: #EDEFF5;
+	box-shadow: 0px 1px 0px 0px #000;
+	-webkit-box-shadow: 0px 1px 0px 0px #000;
+	font-style: Lucida;
+	
+}
+
+nav {
+
+	height: 70px;
+	max-width: 100%;
+	}
+
+.navigation ul {
+	float:right;
+	padding-right: 40px;
+	font-size:1.5em;
+	color: #424242;
+}
+
+.navigation li {
+	text-decoration:none;
+	display: inline;
+	margin-right: 10px;
+	cursor: pointer;
+}
+
+.navigation li:hover {
+	color: #3286BE;
+
+;

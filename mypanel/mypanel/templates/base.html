@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head> 
+        {% block title %} MyPanel {% endblock %}
+        {% load staticfiles %}
+        <link rel='stylesheet' href="{% static "/static/css/style.css" %}">
+
+        <!-- Adding Normalize.css to standardize across different browsers -->
+        <link rel='stylesheet' href="{% static "/static/css/normalize.css" %}">
+
+    </head>
+
+    <body>
+        {% block header %}
+            <header>    
+                <nav class="navigation">
+                    <ul>
+                        <li> Home </li>
+                        <li> About </li>
+                        <li> Contact </li>
+                        <li> Login </li>
+                    </ul>
+                </nav>
+            </header>
+        {% endblock %}
+
+        {% block content %}
+
+        {% endblock %}
+
+
+        {% block footer %}
+
+
+        {% endblock %}
+    </body>
+</html>
