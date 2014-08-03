@@ -42,7 +42,7 @@ Tracking.prototype.send = function(events) {
 	console.log(url);
 
 	req.open('GET', url, true);
-
+	
 	req.send();
 
 };
