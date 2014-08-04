@@ -25,7 +25,8 @@ Tracking.prototype.track = function(eventName) {
 	
 	if (this.queued){
 		local.setItem('event' + '_' + eventObject['time'], JSON.stringify(eventObject));
-	}
+	  return;
+  }
 
 	this.send(eventObject);
 
@@ -56,11 +57,11 @@ Tracking.prototype.dequeue = function() {
 		var keys = Object.keys(local);
 		for (var i=0; i < keys.length; i++){
 
-			this.send(JSON.parse(local[i]));
+			this.send(JSON.parse(local[keys[i]]));
 			
 			/* Remove the Item from Local Storage */
 
-			local.removeItem(i);
+			local.removeItem(keys[i]);
 
 		}
 
