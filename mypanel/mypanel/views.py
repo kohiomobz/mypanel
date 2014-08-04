@@ -10,4 +10,9 @@ def index(request):
 
 def track(request):
 	f = Import(request)
-	return HttpResponse(f.insert())
+
+	# Adding Access Control header to prevent CORS Errors
+	response = HttpResponse();
+	response.write(f.insert())
+	response['Access-Control-Allow-Origin'] = '*'
+	return response

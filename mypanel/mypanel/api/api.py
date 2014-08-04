@@ -16,8 +16,11 @@ class Import(object):
 		self.request = req
 
 	def insert(self):
-		# Parse out the request parameters 
-		request_params = self.request.GET
+		# Parse out the request parameters
+		request_params = self.request.GET if self.request.GET else self.request.POST
+		print request_params
+		if self.request.GET: print self.request.GET, 'get'
+		if self.request.POST: print self.request.POST, 'post'
 
 		# Return dictionary with request params
 		request_dict = request_params.dict()

@@ -6,6 +6,7 @@ var local = window.localStorage;
 function Tracking () {
 
 	this.queued = false;
+	this.trackURL = window.location.hostname != '162.243.131.44' ? 'http://162.243.131.44' : '';
 
 };
 
@@ -37,12 +38,12 @@ Tracking.prototype.send = function(events) {
 
 	var data = events;
 
-	var url = '127.0.0.1:8000/track?' + 'data=' + JSON.stringify(data);
+	var url = this.trackURL + '/track?' + 'data=' + JSON.stringify(data);
 
 	console.log(url);
 
 	req.open('GET', url, true);
-
+	
 	req.send();
 
 };
