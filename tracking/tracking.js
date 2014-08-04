@@ -6,7 +6,7 @@ var local = window.localStorage;
 function Tracking () {
 
 	this.queued = false;
-	this.trackURL = window.location.hostname != '162.243.131.44' ? 'http://162.243.131.44' : '';
+	this.trackURL = window.location.hostname != '162.243.131.44:8000' ? 'http://162.243.131.44:8000' : '';
 
 };
 
