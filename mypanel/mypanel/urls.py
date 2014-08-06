@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, include, url
 
 #  Import mypanel views
-from mypanel.views import hello, index, track
+from mypanel.views import hello, index, track, query
 
 from django.contrib import admin
 admin.autodiscover()
@@ -15,4 +15,5 @@ urlpatterns = patterns('',
     ('^hello/$', hello),
     ('^$', index),
     ('^track', track),
+    ('^query', query),
 )

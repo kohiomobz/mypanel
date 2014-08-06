@@ -3,15 +3,37 @@
 {% block title %} {% endblock %}
 
 {% block content %}
-    
-    <div class='main'>
-        
-        
-    </div>
 
+<div>
+
+Hello
+
+</div>
+<script>
+	function buildRequest(){
+
+
+	}
+
+	function makeRequest(){
+		console.log('request being made');
+		var req = new XMLHttpRequest();
+
+		var url = '/query' 
+
+		req.open('GET', url, true);
+		req.onload = function () {
+			x = this;
+			console.log(this);
+
+		}	
+		req.send();
+
+	}
+	makeRequest();
+		
+</script>
 {% endblock %}
-
-
 
 
 
