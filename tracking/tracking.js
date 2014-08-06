@@ -1,12 +1,24 @@
 /* Event Tracking Library */
 
+/*
+	To use this Tracking lib, add this script to your head tag with the appropriate path ==> <script src="PATH_TOTracking.js"></script>
+	
+	To send an event:
+	1st: Create a new instance of the Tracking object ==> var tracked = new Tracking();
+	2nd: send an event using the track method ==> tracked.track('event');
+	3rd: Navigate to http://162.243.131.44:8000/ and look at your Data in aggregate!
+
+
+*/
+
+
 var local = window.localStorage;
 
 /* Tracking Object */
 function Tracking () {
 
 	this.queued = false;
-	this.trackURL = window.location.hostname != '162.243.131.44' ? 'http://162.243.131.44' : '';
+	this.trackURL = window.location.hostname != '162.243.131.44:8000' ? 'http://162.243.131.44:8000' : '';
 
 };
 
@@ -25,7 +37,8 @@ Tracking.prototype.track = function(eventName) {
 	
 	if (this.queued){
 		local.setItem('event' + '_' + eventObject['time'], JSON.stringify(eventObject));
-	}
+	  return;
+  }
 
 	this.send(eventObject);
 
@@ -56,11 +69,11 @@ Tracking.prototype.dequeue = function() {
 		var keys = Object.keys(local);
 		for (var i=0; i < keys.length; i++){
 
-			this.send(JSON.parse(local[i]));
+			this.send(JSON.parse(local[keys[i]]));
 			
 			/* Remove the Item from Local Storage */
 
-			local.removeItem(i);
+			local.removeItem(keys[i]);
 
 		}
 

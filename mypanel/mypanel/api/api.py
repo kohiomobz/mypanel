@@ -4,26 +4,32 @@ from django.db import connection
 from mypanel_app.models import Event
 import json
 
+def extract_params(request):
+		"""
+		Utility function to parse out query params from a django request
+
+		"""
+		# Parse out the request parameters
+		request_params = self.request.GET if self.request.GET else self.request.POST
+
+		# Return dictionary with request params
+		request_dict = request_params.dict()
+
+		return request_dict
+
+
 class Import(object):
 	"""
 		Import Class with methods for insert and import Endpoints
-
 		Insert method deals with data that 
-
 		Both methods return either a 0 or a 1
 	"""
+
 	def __init__(self, req):
 		self.request = req
 
 	def insert(self):
-		# Parse out the request parameters
-		request_params = self.request.GET if self.request.GET else self.request.POST
-		print request_params
-		if self.request.GET: print self.request.GET, 'get'
-		if self.request.POST: print self.request.POST, 'post'
-
-		# Return dictionary with request params
-		request_dict = request_params.dict()
+		request_dict = extract_params(self.request)
 
 		# Strip the double quotes and format as JSON  || If the data can't be formatted as JSON, return 0
 		try: 
@@ -32,16 +38,30 @@ class Import(object):
 			return 0
 
 		# Create an Event Object with the request dictionary
-		event_object = Event(name=dict_to_json.get('event'), time=dict_to_json.get('time'))
+		event_object = Event(name=dict_to_json.get('event'), time=dict_to_json.get('time').replace('T',' ').split('.')[0])
 		event_object.save()
 
 		return 1
 
 
 
-class Export(object):
+class Query(object):
+	"""
+		Query Class returns SQL data for a client Query
+	"""
+
 	def __init__(self, req):
 		self.request = req
 
 	def read(self):
-		print self.request
+		# grab request parameters
+		request_dict = extract_params(self.request)
+
+		# format as JSON
+		dict_to_json = json.loads(request_dict['data'].replace("'", "\""))
+
+		## Now Query MySQL with date range, events, etc...
+
+		query = Event.objects.all()
+
+		return query
