@@ -10,7 +10,7 @@ def extract_params(request):
 
 		"""
 		# Parse out the request parameters
-		request_params = self.request.GET if self.request.GET else self.request.POST
+		request_params = request.GET if request.GET else request.POST
 
 		# Return dictionary with request params
 		request_dict = request_params.dict()
@@ -52,16 +52,29 @@ class Query(object):
 
 	def __init__(self, req):
 		self.request = req
+	
+	
+	def extract_params(self,request):
+		"""
+		Utility function to parse out query params from a django request
+
+		"""
+		# Parse out the request parameters
+		request_params = request.GET if request.GET else request.POST
+
+		# Return dictionary with request params
+		request_dict = request_params.dict()
+
+		return request_dict
+
 
 	def read(self):
 		# grab request parameters
-		request_dict = extract_params(self.request)
-
+		request_dict = self.extract_params(self.request)
 		# format as JSON
-		dict_to_json = json.loads(request_dict['data'].replace("'", "\""))
+		#dict_to_json = json.loads(request_dict['data'].replace("'", "\""))
 
 		## Now Query MySQL with date range, events, etc...
-
 		query = Event.objects.all()
 
 		return query

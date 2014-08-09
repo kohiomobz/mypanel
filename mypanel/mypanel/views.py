@@ -3,7 +3,7 @@ from django.shortcuts import render_to_response
 from api.api import Import, Query
 
 def hello(request):
-    return HttpResponse("Hello World")
+	return HttpResponse(1)
 
 def index(request):
 	return render_to_response('index.html', {})
@@ -18,11 +18,10 @@ def track(request):
 	return response
 
 def query(request):
-	f = Query(request)
-	print f
-
+	Q = Query(request)
 	response = HttpResponse()
 	response['Access-Control-Allow-Origin'] = '*'
-	response['data'] = f.read()
+	response['data'] = Q.read()
 	print response['data']
-	return HttpResponse(1)
+
+	return response
