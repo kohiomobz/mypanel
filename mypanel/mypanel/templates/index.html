@@ -4,11 +4,6 @@
 
 {% block content %}
 
-<div>
-
-Hello
-
-</div>
 <script>
 	function buildRequest(){
 
@@ -22,17 +17,17 @@ Hello
 		var url = '/query' 
 
 		req.open('GET', url, true);
-		req.onload = function () {
-			x = this;
-			console.log(this);
-
+		req.onload = function() {
+		    return JSON.parse(this.responseText);	
 		}	
 		req.send();
-
+		
+	
 	}
-	makeRequest();
+	var data = makeRequest();
 		
 </script>
+
 {% endblock %}
 
 

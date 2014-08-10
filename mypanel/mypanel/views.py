@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from api.api import Import, Query
+import json
 
 def hello(request):
 	return HttpResponse(1)
@@ -20,8 +21,14 @@ def track(request):
 def query(request):
 	Q = Query(request)
 	response = HttpResponse()
+	
+	"""
+	    Event.objects.all().values() returns a list but that list can't be formatted as valid Json
+	"""
+	query_to_json = []
+	for val in Q.read():
+	    query_to_json.append(val)
+	
 	response['Access-Control-Allow-Origin'] = '*'
-	response['data'] = Q.read()
-	print response['data']
-
+	response.write(json.dumps(query_to_json))
 	return response

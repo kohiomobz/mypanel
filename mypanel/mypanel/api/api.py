@@ -44,7 +44,6 @@ class Import(object):
 		return 1
 
 
-
 class Query(object):
 	"""
 		Query Class returns SQL data for a client Query
@@ -72,9 +71,10 @@ class Query(object):
 		# grab request parameters
 		request_dict = self.extract_params(self.request)
 		# format as JSON
-		#dict_to_json = json.loads(request_dict['data'].replace("'", "\""))
-
+		if request_dict:
+		    dict_to_json = json.loads(request_dict['data'].replace("'", "\""))
 		## Now Query MySQL with date range, events, etc...
-		query = Event.objects.all()
+		query = Event.objects.all().values()
+		print query
 
 		return query
