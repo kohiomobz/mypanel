@@ -3,3 +3,4 @@
 settings.py
 *.DS_STORE
 *:w
+*.swp

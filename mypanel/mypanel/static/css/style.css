@@ -34,4 +34,21 @@ nav {
 .navigation li:hover {
 	color: #3286BE;
 
-;
+}
+
+/* Container div for highcharts graph */
+#container {  
+   
+    height: 500px; max-width: 100%;
+
+}
+
+#table {
+    height: 300px;max-width:500px;
+}
+
+table {
+    height: 100%; width:100%;
+}
+
+

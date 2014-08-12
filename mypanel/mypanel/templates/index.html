@@ -12,6 +12,18 @@
 <script type="text/javascript" src="{% static "/static/js/highcharts.js" %}"></script>
 <script type="text/javascript" src="{% static "/static/js/exporting.js" %}"></script>
 <script type="text/javascript" src="{% static "/static/js/main.js" %}"></script>
+<link href="{% static "/static/css/style.css" %}" type="rel/stylesheet"></script>
+
+<!-- container div for highcharts graph-->
+
+<div id='table'>
+    <table class='data-table'>
+	<!-- add header row -->
+	<tr><th>Event ID</th><th>Event Name</th><th>Time</th><tr>
+
+    </table>
+
+</div>
 
 {% endblock %}
 

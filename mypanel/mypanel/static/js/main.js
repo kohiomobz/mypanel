@@ -89,14 +89,21 @@ window.onload = function() {
 	
 	    $('g.highcharts-button').hide(); /* remove the export module instead */
 	}		
-	function fillTable(tableData, DateRange) {
-	
+	function fillTable(tableData, dateRange) {
+	    for (var i=0; i < tableData.length; i++) {
+		var table = document.getElementsByClassName('data-table')[0];
+		console.log(table);
+		var element = document.createElement('tr');
+		var html = '<td>' + tableData[i]['event_id'] + '</td><td>' + tableData[i]['name'] + '</td><td>' + tableData[i]['time'] + '</td>';
 
+		element.innerHTML = html;
+		console.log(element);
+		table.appendChild(element);
+	    }
 
 	}	
 
 	/* Make the Request and Plot the Graph  */
 	
 	makeDataRequest();
-	
 }
