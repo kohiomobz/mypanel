@@ -35,6 +35,32 @@ nav {
 	color: #3286BE;
 
 }
+/* Header Div with all of the date selector elems and whatnot */
+
+.header-row {
+	max-width: 100%;
+	height: 60px;
+}
+
+.event-selector, .dates {
+	margin-top: 10px;
+}
+
+.event-selector { 
+	float:left;
+	margin-left: 120px;
+	width: 120px;
+}
+
+select {
+	width: 100%;
+}
+
+.dates {
+	margin-top:15px;
+	float:right;
+	margin-right: 200px;
+}
 
 /* Container div for highcharts graph */
 #container {  
