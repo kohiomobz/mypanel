@@ -67,32 +67,46 @@ class Query(object):
 
 
     def read(self):
+        query = None 
+
         # grab request parameters
         request_dict = self.extract_params(self.request)
         from_date = request_dict.get('from_date')
         to_date = request_dict.get('to_date')
-        query = None
-
+        event = request_dict.get('events')
+        print request_dict
+        print event,'helo'
         if from_date and to_date:
             print from_date,to_date
             newfrom = parser.parse(from_date)
             newto = parser.parse(to_date)
             print type(newfrom), type(newto)
-            query = Event.objects.filter(time__gt=newfrom).filter(time__lt=newto).values()
+            query = Event.objects.filter(time__gt=newfrom).filter(time__lt=newto)
 
         ## Now Query MySQL with date range, events, etc...
 
-        if not query: query  = Event.objects.all().values()
+        if not query: query  = Event.objects.all()
 
-        data = self.format_data(query)
+        ## A specific event query
+        if event and event.lower() != 'all': 
+            q = query.filter(name=event)
+            print q, 'yes'
+            return self.format_data(q.values)
+
+        data = self.format_data(query.values())
+
         return data
 
     def format_data(self, event_list):
         """
             Take a list of events and return a formatted list where the values are summed by day
         """
+
         return event_list
+
+
         """
+
         events = []
         event_dct = {} 
         for val in event_list:

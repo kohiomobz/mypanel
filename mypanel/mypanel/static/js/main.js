@@ -4,6 +4,7 @@ window.onload = function() {
     var fromInput = document.getElementsByName('from')[0];
     var toInput = document.getElementsByName('to')[0];
     var submit = document.getElementById('date-submit');
+    var select = document.getElementsByClassName('events')[0];
 
     submit.onclick = function() {
         event.preventDefault();
@@ -11,13 +12,19 @@ window.onload = function() {
 
     }
 
+    select.onchange = function(){
+        makeDataRequest();
+
+    }
+
     /* Populate the Event Dropdown */
+
     var populateEvents = function(list) {
-        var select = document.getElementsByClassName('events')[0];
         /* Add All to dropdown */
 
         var option = document.createElement('option');
         option.text = 'All';
+        option.selected = true;
         select.add(option);
 
         for (var i=0; i< list.length; i++){
@@ -46,12 +53,14 @@ window.onload = function() {
         var queryString = '/query?';
         var fromDate = document.getElementsByName('from')[0].value;
         var toDate = document.getElementsByName('to')[0].value;
-
+        var events = document.getElementsByClassName('events')[0].value;
+        
         if (fromDate && toDate ) {
-            queryString += 'from_date=' + fromDate + '&to_date=' + toDate;
+            queryString += 'from_date=' + fromDate + '&to_date=' + toDate + '&events=' + events;
+            console.log(events);
         }
 
-        return queryString;	
+        return queryString;
     }
 
     /* Fire the XHR Request to mypanel servers */
@@ -80,7 +89,10 @@ window.onload = function() {
                 event_list.push(datums[i]['name']);
             }
         }
-        populateEvents(event_list);
+        /* only once on page load */
+
+        if (!select.length) { populateEvents(event_list) };
+
         var seriesList = [];
 
         var populateSeriesList = function(slist) {
@@ -137,7 +149,7 @@ window.onload = function() {
 
         $('g.highcharts-button').hide(); /* remove the export module instead */
     }
-    
+
         function fillTable(tableData, dateRange) {
             for (var i=0; i < tableData.length; i++) {
                 var table = document.getElementsByClassName('data-table')[0];
