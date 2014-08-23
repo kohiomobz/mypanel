@@ -107,6 +107,13 @@ window.onload = function() {
 
             }
         }
+
+        /* categories list should be between whatever days you select in the range.  Default is 2014-08-01 to 2014-08-31 */
+
+        /* If date range is longer than a month, sum over buckets for each month and plot if for that month */
+        
+        categories = [];
+
         populateSeriesList(seriesList);
 
         $('#container').highcharts({

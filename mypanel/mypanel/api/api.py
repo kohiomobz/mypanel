@@ -60,8 +60,8 @@ class Query(object):
         """
         # Parse out the request parameters
         request_params = request.GET if request.GET else request.POST
-        # Return dictionary with request params
         print request_params
+        # Return dictionary with request params
         request_dict = request_params.dict()
         return request_dict
 
@@ -74,10 +74,8 @@ class Query(object):
         from_date = request_dict.get('from_date')
         to_date = request_dict.get('to_date')
         event = request_dict.get('events')
-        print request_dict
-        print event,'helo'
+        
         if from_date and to_date:
-            print from_date,to_date
             newfrom = parser.parse(from_date)
             newto = parser.parse(to_date)
             print type(newfrom), type(newto)
@@ -88,10 +86,10 @@ class Query(object):
         if not query: query  = Event.objects.all()
 
         ## A specific event query
+        
         if event and event.lower() != 'all': 
-            q = query.filter(name=event)
-            print q, 'yes'
-            return self.format_data(q.values)
+            q = query.filter(name=event).values()
+            return self.format_data(q)
 
         data = self.format_data(query.values())
 
@@ -101,9 +99,11 @@ class Query(object):
         """
             Take a list of events and return a formatted list where the values are summed by day
         """
+        event_dict = {}
 
+        for val in event_list:
+            pass
         return event_list
-
 
         """
 
