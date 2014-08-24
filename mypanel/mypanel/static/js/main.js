@@ -55,9 +55,15 @@ window.onload = function() {
         var toDate = document.getElementsByName('to')[0].value;
         var events = document.getElementsByClassName('events')[0].value;
         
+
         if (fromDate && toDate ) {
-            queryString += 'from_date=' + fromDate + '&to_date=' + toDate + '&events=' + events;
+            queryString += 'from_date=' + fromDate + '&to_date=' + toDate;
             console.log(events);
+        }
+
+        if (events) {
+
+            queryString += '&events=' + events;
         }
 
         return queryString;
@@ -71,7 +77,6 @@ window.onload = function() {
 
         req.open('GET', url, true);
         req.onload = function() {
-            console.log(this.responseText);
             var data = JSON.parse(this.responseText);
             drawGraph(data, '');
             fillTable(data, '');
@@ -158,14 +163,30 @@ window.onload = function() {
     }
 
         function fillTable(tableData, dateRange) {
+            /* write a proper remove function at some point */
+            removeTableRows();
+            
             for (var i=0; i < tableData.length; i++) {
-                var table = document.getElementsByClassName('data-table')[0];
+                var table = document.getElementsByClassName('main-table-body')[0];
                 var element = document.createElement('tr');
+                element.className = 'new-table-row';
                 var html = '<td>' + tableData[i]['event_id'] + '</td><td>' + tableData[i]['name'] + '</td><td>' + tableData[i]['time'] + '</td>';
 
                 element.innerHTML = html;
                 table.appendChild(element);
             }
+
+        }
+
+        function removeTableRows() {
+            var table = document.getElementsByClassName('main-table-body')[0];
+            var length = table.getElementsByTagName('tr');
+
+            for (var x = length.length-1; x > 0; x--) {
+                table.removeChild(length[x]);
+
+            }
+
 
         }
 

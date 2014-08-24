@@ -1,4 +1,9 @@
 /* CSS File for Mypanel Dashboard */
+html {
+	max-width: 1200px;
+	height: 1000px;
+
+}
 body {
 
 }
@@ -71,10 +76,29 @@ select {
 
 #table {
     height: 300px;max-width:500px;
+  	margin: 0 auto;
 }
 
 table {
     height: 100%; width:100%;
+}
+
+.new-table-row {
+	margin-left:15px;
+	height: 20px;
+}
+
+.new-table-row td {
+	height:20px;
+
+}
+.header-row {
+	height: 20px;
+
+}
+.new-table-row th {
+	height:20px;
+
 }
 
 

@@ -60,16 +60,17 @@ class Query(object):
         """
         # Parse out the request parameters
         request_params = request.GET if request.GET else request.POST
-        print request_params
+        print request.GET
         # Return dictionary with request params
         request_dict = request_params.dict()
         return request_dict
 
 
     def read(self):
-        query = None 
+        query = None
 
-        # grab request parameters
+        # Grab Request Parameters
+        
         request_dict = self.extract_params(self.request)
         from_date = request_dict.get('from_date')
         to_date = request_dict.get('to_date')
@@ -78,19 +79,19 @@ class Query(object):
         if from_date and to_date:
             newfrom = parser.parse(from_date)
             newto = parser.parse(to_date)
-            print type(newfrom), type(newto)
             query = Event.objects.filter(time__gt=newfrom).filter(time__lt=newto)
 
         ## Now Query MySQL with date range, events, etc...
-
         if not query: query  = Event.objects.all()
-
         ## A specific event query
+        print request_dict, event
         
         if event and event.lower() != 'all': 
             q = query.filter(name=event).values()
             return self.format_data(q)
 
+        print query
+        
         data = self.format_data(query.values())
 
         return data
