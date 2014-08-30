@@ -4,6 +4,8 @@ from django.db import connection
 from mypanel_app.models import Event
 import json
 from dateutil import parser
+from datetime import datetime, timedelta
+from collections import defaultdict
 
 def extract_params(request):
         """
@@ -75,42 +77,76 @@ class Query(object):
         from_date = request_dict.get('from_date')
         to_date = request_dict.get('to_date')
         event = request_dict.get('events')
-        
+        date_range = []
+
+
         if from_date and to_date:
             newfrom = parser.parse(from_date)
             newto = parser.parse(to_date)
             query = Event.objects.filter(time__gt=newfrom).filter(time__lt=newto)
-
+            date_range = self.set_date_range(newfrom,new_to)
         ## Now Query MySQL with date range, events, etc...
         if not query: query  = Event.objects.all()
+
         ## A specific event query
-        print request_dict, event
         
         if event and event.lower() != 'all': 
             q = query.filter(name=event).values()
-            return self.format_data(q)
+            
+            return self.format_data(q, date_range)
 
         print query
         
-        data = self.format_data(query.values())
+        data = self.format_data(query.values(), date_range)
 
         return data
 
-    def format_data(self, event_list):
+    def set_date_range(self, from_date, to_date):
+        """ 
+            If date range is greater than 30 days, use months instead if its greater than 365 days, use years
+            If date range is smaller than 30 days, use a 30 day date range from the start of the from_date
+
+        """
+        start = from_date.split('-')
+        end = to_date.split('-')
+
+        datetime_start = datetime.date(start[0], start[1], start[2])
+        datetime_end = datetime.date(end[0], end[1], end[2])
+
+        ## find time-delta between these two dates
+
+
+
+        ## return list of dates 
+        pass
+
+
+    def format_data(self, event_list, date_range):
         """
             Take a list of events and return a formatted list where the values are summed by day
         """
-        event_dict = {}
+
+        event_dict = defaultdict(list)
+        values = []
+        
+        if not date_range or len(date_range) < 31:
+            values = [0 for x in range(30)]
+
 
         for val in event_list:
+            if not event_dict.get(val['name']):
+                event_dict[val['name']] = values
+                ## add one to the specific range element (i.e if the element is th efourth in the list because the date of the event is 08-04)
+            else:
+                ## find the range element
+                index = 0
+                event_dict[val['name']][index] += 1
             pass
+
         return event_list
 
         """
 
-        events = []
-        event_dct = {} 
-        for val in event_list:
-            if event_dct.get(val['name']):
-                event_dct[val['name']]['date']
+
+
         """

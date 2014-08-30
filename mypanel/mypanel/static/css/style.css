@@ -78,27 +78,17 @@ select {
     height: 300px;max-width:500px;
   	margin: 0 auto;
 }
+table, th, td {
+
+   border: 1px solid black;
+}
 
 table {
     height: 100%; width:100%;
+  border-collapse: collapse;
 }
 
-.new-table-row {
-	margin-left:15px;
-	height: 20px;
+td {
+	text-align:center;
 }
-
-.new-table-row td {
-	height:20px;
-
-}
-.header-row {
-	height: 20px;
-
-}
-.new-table-row th {
-	height:20px;
-
-}
-
 
