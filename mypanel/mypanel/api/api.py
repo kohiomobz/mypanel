@@ -60,7 +60,7 @@ class Query(object):
         Utility function to parse out query params from a django request
 
         """
-        # Parse out the request parameters
+        # Parse out the request parametersZ
         request_params = request.GET if request.GET else request.POST
         print request.GET
         # Return dictionary with request params
