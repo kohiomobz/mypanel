@@ -6,6 +6,7 @@ import json
 from dateutil import parser
 from datetime import datetime, timedelta
 from collections import defaultdict
+import pdb
 
 def extract_params(request):
         """
@@ -72,31 +73,35 @@ class Query(object):
         query = None
 
         # Grab Request Parameters
-        
+
         request_dict = self.extract_params(self.request)
         from_date = request_dict.get('from_date')
         to_date = request_dict.get('to_date')
         event = request_dict.get('events')
-        date_range = []
+        date_range = None
 
 
         if from_date and to_date:
             newfrom = parser.parse(from_date)
             newto = parser.parse(to_date)
             query = Event.objects.filter(time__gt=newfrom).filter(time__lt=newto)
+            print query, 'query'
+            print from_date, to_date
+            self.set_date_range(newfrom,new_to)
             date_range = self.set_date_range(newfrom,new_to)
         ## Now Query MySQL with date range, events, etc...
+
         if not query: query  = Event.objects.all()
 
         ## A specific event query
-        
+
         if event and event.lower() != 'all': 
             q = query.filter(name=event).values()
-            
+
             return self.format_data(q, date_range)
 
-        print query
-        
+        print query,'hello'
+
         data = self.format_data(query.values(), date_range)
 
         return data
@@ -107,19 +112,21 @@ class Query(object):
             If date range is smaller than 30 days, use a 30 day date range from the start of the from_date
 
         """
+        print 'here'
         start = from_date.split('-')
         end = to_date.split('-')
+
+        print start, end
 
         datetime_start = datetime.date(start[0], start[1], start[2])
         datetime_end = datetime.date(end[0], end[1], end[2])
 
         ## find time-delta between these two dates
-
+        print datetime_start, datetime_end
 
 
         ## return list of dates 
-        pass
-
+        return None
 
     def format_data(self, event_list, date_range):
         """
