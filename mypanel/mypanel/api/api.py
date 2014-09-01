@@ -4,7 +4,7 @@ from django.db import connection
 from mypanel_app.models import Event
 import json
 from dateutil import parser
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from collections import defaultdict
 import pdb
 
@@ -63,7 +63,6 @@ class Query(object):
         """
         # Parse out the request parametersZ
         request_params = request.GET if request.GET else request.POST
-        print request.GET
         # Return dictionary with request params
         request_dict = request_params.dict()
         return request_dict
@@ -80,16 +79,13 @@ class Query(object):
         event = request_dict.get('events')
         date_range = None
 
-
         if from_date and to_date:
-            newfrom = parser.parse(from_date)
-            newto = parser.parse(to_date)
-            query = Event.objects.filter(time__gt=newfrom).filter(time__lt=newto)
-            print query, 'query'
-            print from_date, to_date
-            self.set_date_range(newfrom,new_to)
-            date_range = self.set_date_range(newfrom,new_to)
-        ## Now Query MySQL with date range, events, etc...
+            new_from = parser.parse(from_date)
+            new_to = parser.parse(to_date)
+            
+            ## Now Query MySQL with date range, events, etc...
+            query = Event.objects.filter(time__gt=new_from).filter(time__lt=new_to)
+            date_range = self.set_date_range(from_date,to_date)
 
         if not query: query  = Event.objects.all()
 
@@ -99,12 +95,10 @@ class Query(object):
             q = query.filter(name=event).values()
 
             return self.format_data(q, date_range)
-
-        print query,'hello'
-
+    
         data = self.format_data(query.values(), date_range)
 
-        return data
+        return {'data':data, 'values':date_range}
 
     def set_date_range(self, from_date, to_date):
         """ 
@@ -112,25 +106,32 @@ class Query(object):
             If date range is smaller than 30 days, use a 30 day date range from the start of the from_date
 
         """
-        print 'here'
-        start = from_date.split('-')
-        end = to_date.split('-')
+        #[int(from_date.split('-')[0])] + 
+        start = [int(x) for x in from_date.split('-')]
+        end = [int(x) for x in to_date.split('-')]
 
-        print start, end
+        datetime_start = date(start[0], start[1], start[2])
+        datetime_end = date(end[0], end[1], end[2])
 
-        datetime_start = datetime.date(start[0], start[1], start[2])
-        datetime_end = datetime.date(end[0], end[1], end[2])
+        diff = datetime_end - datetime_start
+        
+        # The number of days between your start date and end date
+        number_of_days = diff.days
+        date_list = []
 
-        ## find time-delta between these two dates
-        print datetime_start, datetime_end
+        if number_of_days > 31:
+            pass ## return months
+        else:
+            for val in range(number_of_days):
+                new_date = datetime_start + timedelta(val)
+                date_list.append(new_date.isoformat())
 
-
-        ## return list of dates 
-        return None
+        return date_list
 
     def format_data(self, event_list, date_range):
         """
             Take a list of events and return a formatted list where the values are summed by day
+            also remove all unicode values to avoid json errors
         """
 
         event_dict = defaultdict(list)
@@ -141,16 +142,20 @@ class Query(object):
 
 
         for val in event_list:
+            print val
             if not event_dict.get(val['name']):
                 event_dict[val['name']] = values
-                ## add one to the specific range element (i.e if the element is th efourth in the list because the date of the event is 08-04)
+                print date_range
+                index = date_range.index(val['time'])
+                print date_range
+                event_dict[val['name']][index] +=1
+
             else:
                 ## find the range element
-                index = 0
+                index = date_range[val['time']]
                 event_dict[val['name']][index] += 1
-            pass
-
-        return event_list
+        print event_dict
+        return event_dict
 
         """
 

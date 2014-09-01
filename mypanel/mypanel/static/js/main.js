@@ -17,6 +17,14 @@ window.onload = function() {
 
     }
 
+    /* Set Default Date Range */
+
+    /* Set To Date to Today's Date */
+    toInput.value = new Date().toISOString().split('T')[0];
+
+    /* Convert value to UTC and subtract 30 days in seconds for default value of from date */
+
+
     /* Populate the Event Dropdown */
 
     var populateEvents = function(list) {
@@ -77,7 +85,9 @@ window.onload = function() {
 
         req.open('GET', url, true);
         req.onload = function() {
+            console.log(this.responseText);
             var data = JSON.parse(this.responseText);
+            console.log(data);
             drawGraph(data, '');
             fillTable(data, '');
         }
@@ -88,6 +98,8 @@ window.onload = function() {
     /* Highcharts Graphing Function */
     var drawGraph = function(datums, dateRange){
 
+
+        console.log(datums);
         var event_list = [];
         for (var i=0; i < datums.length; i++){
             if (datums[i]['name'] in event_list === false){
