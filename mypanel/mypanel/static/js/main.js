@@ -23,7 +23,9 @@ window.onload = function() {
     toInput.value = new Date().toISOString().split('T')[0];
 
     /* Convert value to UTC and subtract 30 days in seconds for default value of from date */
-
+    var dateDiff = new Date() - 30*24*60*60*1000
+    
+    fromInput.value = new Date(dateDiff).toISOString().split('T')[0]
 
     /* Populate the Event Dropdown */
 
