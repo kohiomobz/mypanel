@@ -78,10 +78,10 @@ class Query(object):
         to_date = request_dict.get('to_date')
         event = request_dict.get('events')
         date_range = None
-        
+
         new_from = parser.parse(from_date)
         new_to = parser.parse(to_date)
-            
+
         ## Now Query MySQL with date range, events, etc...
         query = Event.objects.filter(time__gt=new_from).filter(time__lt=new_to)
         date_range = self.set_date_range(from_date,to_date)
@@ -92,9 +92,8 @@ class Query(object):
             q = query.filter(name=event).values()
 
             return self.format_data(q, date_range)
-    
-        data = self.format_data(query.values(), date_range)
 
+        data = self.format_data(query.values(), date_range)
         return {'data':data, 'values':date_range}
 
     def set_date_range(self, from_date, to_date):
@@ -111,7 +110,7 @@ class Query(object):
         datetime_end = date(end[0], end[1], end[2])
 
         diff = datetime_end - datetime_start
-        
+
         # The number of days between your start date and end date
         number_of_days = diff.days
         date_list = []
@@ -132,9 +131,11 @@ class Query(object):
         """
 
         event_dict = defaultdict(list)
+
         event_dict['table'] = [x for x in event_list]
+        print event_dict, event_list
         values = []
-        
+
         if len(date_range) < 31:
             values = [0 for x in range(30)]
 
@@ -145,9 +146,9 @@ class Query(object):
                 index = date_range.index(val['time'])
                 event_dict[val['name']][index] +=1
             else:
-                index = date_range[val['time']]
+                index = date_range.index(val['time'])
                 event_dict[val['name']][index] += 1
-        
+        print event_dict
         return event_dict
 
         """

@@ -23,9 +23,9 @@ window.onload = function() {
     toInput.value = new Date().toISOString().split('T')[0];
 
     /* Convert value to UTC and subtract 30 days in seconds for default value of from date */
-    var dateDiff = new Date() - 30*24*60*60*1000
+    var dateDiff = new Date() - 30*24*60*60*1000;
 
-    fromInput.value = new Date(dateDiff).toISOString().split('T')[0]
+    fromInput.value = new Date(dateDiff).toISOString().split('T')[0];
 
     /* Populate the Event Dropdown */
 
@@ -64,7 +64,7 @@ window.onload = function() {
         var fromDate = document.getElementsByName('from')[0].value;
         var toDate = document.getElementsByName('to')[0].value;
         var events = document.getElementsByClassName('events')[0].value;
-        
+ 
 
         if (fromDate && toDate ) {
             queryString += 'from_date=' + fromDate + '&to_date=' + toDate;
@@ -90,7 +90,7 @@ window.onload = function() {
             var data = JSON.parse(this.responseText);
             console.log(data);
             drawGraph(data, '');
-            fillTable(data, '');
+            fillTable(data, '', '');
         }
         req.send();
 
@@ -128,26 +128,27 @@ window.onload = function() {
 
             }
 
-            /*
-            for (var i=0; i < datums['data']['table'].length; i++){
-                var graphObject = {};
-                if (Object.keys(i) != datums['data']['table']){
-                    graphObject['name'] = Object.keys(i);
+        }
 
-                     Sum over the events in each bucket
-                    graphObject['data'] = datums['data'][i]  
-                    seriesList.push(graphObject);
-                }
+        function beautifyDates(dates){
+            var dateList = [];
+            for (var i=0; i < dates.length; i++) {
+                var temp = new Date(dates[i]).toDateString().split(' ');
+                var dateString = temp[1] + ' ' + temp[2];
 
-            } */
+                dateList.push(dateString);
+            }
+
+            console.log(dateList);
+            return dateList;
         }
 
         /* categories list should be between whatever days you select in the range.  Default is 2014-08-01 to 2014-08-31 */
 
         /* If date range is longer than a month, sum over buckets for each month and plot if for that month */
-        
-        categories = [];
 
+        categories = [];
+        
         populateSeriesList(seriesList);
 
         $('#container').highcharts({
@@ -157,7 +158,7 @@ window.onload = function() {
             },
 
             xAxis: {
-                categories: datums['values']
+                categories: beautifyDates(datums['values'])
             },
             yAxis: {
                 title: {
@@ -190,15 +191,17 @@ window.onload = function() {
         $('g.highcharts-button').hide(); /* remove the export module instead */
     }
 
-        function fillTable(tableData, dateRange) {
+        function fillTable(tableData, dateRange, index) {
             /* write a proper remove function at some point */
+
             removeTableRows();
-            
-            for (var i=0; i < tableData.length; i++) {
+
+            var rows = tableData['data']['table'];
+            for (var i=0; i < rows.length; i++) {
                 var table = document.getElementsByClassName('main-table-body')[0];
                 var element = document.createElement('tr');
                 element.className = 'new-table-row';
-                var html = '<td>' + tableData[i]['event_id'] + '</td><td>' + tableData[i]['name'] + '</td><td>' + tableData[i]['time'] + '</td>';
+                var html = '<td>' + rows[i]['event_id'] + '</td><td>' + rows[i]['name'] + '</td><td>' + rows[i]['time'] + '</td>';
 
                 element.innerHTML = html;
                 table.appendChild(element);
