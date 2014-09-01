@@ -78,16 +78,13 @@ class Query(object):
         to_date = request_dict.get('to_date')
         event = request_dict.get('events')
         date_range = None
-
-        if from_date and to_date:
-            new_from = parser.parse(from_date)
-            new_to = parser.parse(to_date)
+        
+        new_from = parser.parse(from_date)
+        new_to = parser.parse(to_date)
             
-            ## Now Query MySQL with date range, events, etc...
-            query = Event.objects.filter(time__gt=new_from).filter(time__lt=new_to)
-            date_range = self.set_date_range(from_date,to_date)
-
-        if not query: query  = Event.objects.all()
+        ## Now Query MySQL with date range, events, etc...
+        query = Event.objects.filter(time__gt=new_from).filter(time__lt=new_to)
+        date_range = self.set_date_range(from_date,to_date)
 
         ## A specific event query
 
@@ -135,26 +132,22 @@ class Query(object):
         """
 
         event_dict = defaultdict(list)
+        event_dict['table'] = [x for x in event_list]
         values = []
         
-        if not date_range or len(date_range) < 31:
+        if len(date_range) < 31:
             values = [0 for x in range(30)]
 
 
         for val in event_list:
-            print val
             if not event_dict.get(val['name']):
                 event_dict[val['name']] = values
-                print date_range
                 index = date_range.index(val['time'])
-                print date_range
                 event_dict[val['name']][index] +=1
-
             else:
-                ## find the range element
                 index = date_range[val['time']]
                 event_dict[val['name']][index] += 1
-        print event_dict
+        
         return event_dict
 
         """

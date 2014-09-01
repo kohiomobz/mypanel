@@ -24,7 +24,7 @@ window.onload = function() {
 
     /* Convert value to UTC and subtract 30 days in seconds for default value of from date */
     var dateDiff = new Date() - 30*24*60*60*1000
-    
+
     fromInput.value = new Date(dateDiff).toISOString().split('T')[0]
 
     /* Populate the Event Dropdown */
@@ -87,7 +87,6 @@ window.onload = function() {
 
         req.open('GET', url, true);
         req.onload = function() {
-            console.log(this.responseText);
             var data = JSON.parse(this.responseText);
             console.log(data);
             drawGraph(data, '');
@@ -115,16 +114,32 @@ window.onload = function() {
         var seriesList = [];
 
         var populateSeriesList = function(slist) {
-
-            for (var i=0; i < datums.length; i++){
+            
+            var keys = Object.keys(datums['data']);
+            for (var i=0; i < keys.length; i++){
                 var graphObject = {};
-                graphObject['name'] = datums[i]['name'];
+                if (keys[i] != 'table') {
+                    graphObject['name'] = keys[i];
 
-                /* Sum over the events in each bucket */
-                graphObject['data'] = [0,1,2,3,4,5,6,7,8,9,10]
-                seriesList.push(graphObject);
+                    graphObject['data'] = datums['data'][keys[i]];
+                    seriesList.push(graphObject);   
+                    console.log(graphObject);
+                }
 
             }
+
+            /*
+            for (var i=0; i < datums['data']['table'].length; i++){
+                var graphObject = {};
+                if (Object.keys(i) != datums['data']['table']){
+                    graphObject['name'] = Object.keys(i);
+
+                     Sum over the events in each bucket
+                    graphObject['data'] = datums['data'][i]  
+                    seriesList.push(graphObject);
+                }
+
+            } */
         }
 
         /* categories list should be between whatever days you select in the range.  Default is 2014-08-01 to 2014-08-31 */
@@ -142,8 +157,7 @@ window.onload = function() {
             },
 
             xAxis: {
-                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+                categories: datums['values']
             },
             yAxis: {
                 title: {
