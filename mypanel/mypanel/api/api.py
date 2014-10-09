@@ -152,7 +152,7 @@ class Query(object):
         return event_dict
 
         """
-            Adding comment to test Github Integration
+            Adding comment to test Github Integration.
 
 
         """
