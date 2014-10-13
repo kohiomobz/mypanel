@@ -30,11 +30,12 @@ def query(request):
         Event.objects.all().values() returns a list but that list can't be formatted as valid Json
     """
     query_to_json = Q.read()
-    print query_to_json
-    x = query_to_json
-    print x
-    print json.dumps([query_to_json])
 
+    print query_to_json, 'json'
+    print json.dumps(query_to_json), 'json response'
+    
     response['Access-Control-Allow-Origin'] = '*'
     response.write(json.dumps(query_to_json))
+    print response, 'response'
+
     return response

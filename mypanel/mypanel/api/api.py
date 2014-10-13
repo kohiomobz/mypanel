@@ -86,6 +86,7 @@ class Query(object):
         query = Event.objects.filter(time__gt=new_from).filter(time__lt=new_to)
         date_range = self.set_date_range(from_date,to_date)
 
+        print query.values()
         ## A specific event query
 
         if event and event.lower() != 'all': 
@@ -130,29 +131,21 @@ class Query(object):
             also remove all unicode values to avoid json errors
         """
 
-        event_dict = defaultdict(list)
+        event_dict = {}
+        print event_list, 'event_list'
+        event_dict['table'] = event_list
 
-        event_dict['table'] = [x for x in event_list]
-        print event_dict, event_list
-        values = []
-
-        if len(date_range) < 31:
-            values = [0 for x in range(30)]
-
-
+        print event_dict, 'events'
         for val in event_list:
             if not event_dict.get(val['name']):
-                event_dict[val['name']] = values
-                index = date_range.index(val['time'])
-                event_dict[val['name']][index] +=1
+                print val, event_dict
+                event_dict[val['name']] = {x:0 for x in date_range}
+                event_dict[val['name']][val['time']] +=1
+                print event_dict
             else:
-                index = date_range.index(val['time'])
-                event_dict[val['name']][index] += 1
-        print event_dict
+                event_dict[val['name']][val['time']] +=1
+
+        print event_dict, 'finished'
+
         return event_dict
 
-        """
-            Adding comment to test Github Integration.
-
-
-        """
