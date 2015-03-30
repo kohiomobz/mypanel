@@ -13,12 +13,13 @@
 
 
 var local = window.localStorage;
+var hostname = '0.0.0.0'
 
 /* Tracking Object */
 function Tracking () {
 
 	this.queued = false;
-	this.trackURL = window.location.hostname != '162.243.131.44:8000' ? 'http://162.243.131.44:8000' : '';
+	this.trackURL = window.location.hostname != hostname ? 'http://' + hostname : '';
 
 };
 
